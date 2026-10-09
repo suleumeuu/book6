@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>C++ машинаға бағытталған бағдарламалау</title>
+<style>
+:root{--line:#d8dde5;--ink:#172033;--muted:#667085;--green:#087f8c;--bg:#e9ebef}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg)}
+button,input{font:inherit}button{border:1px solid var(--line);background:#fff;border-radius:7px;padding:9px 12px;cursor:pointer;white-space:nowrap}button:hover{background:#f4f7fa}
+.top{height:64px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px;padding:8px 16px;position:sticky;top:0;z-index:5}
+.menu{font-size:22px;width:39px;height:39px;padding:0}.brand{min-width:260px;flex:1}.brand strong{display:block;font-size:16px}.brand small{color:var(--muted);font-size:12px}
+.tools{display:flex;align-items:center;gap:8px}.search{width:205px;border:1px solid var(--line);border-radius:7px;padding:10px}.pagefield{width:54px;padding:9px;border:1px solid var(--line);border-radius:7px;text-align:center}.zoom{min-width:48px;text-align:center}
+.shell{display:flex;height:calc(100vh - 118px)}.sidebar{width:285px;flex-shrink:0;background:#fff;border-right:1px solid var(--line);overflow:auto;padding:18px 14px}.sidebar.hidden{display:none}
+.side-title{font-size:15px;font-weight:700;margin:3px 8px 14px}.contents{display:flex;flex-direction:column;gap:4px}.contents a{padding:10px 11px;text-decoration:none;color:#344054;border-radius:7px;font-size:13px;line-height:1.35}.contents a:hover,.contents a.active{background:#e8f5f5;color:#066875}
+.viewer{flex:1;overflow:auto;display:flex;justify-content:center;align-items:flex-start;padding:24px 20px 40px;position:relative}.page-wrap{background:white;box-shadow:0 2px 12px #17203325;min-height:300px;position:relative}.page-wrap canvas{display:block;max-width:none}.status{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:#172033d9;color:white;border-radius:6px;padding:7px 12px;font-size:12px;display:none}
+.bottom{height:54px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:7px 16px;gap:8px}.bottom-left,.bottom-right{display:flex;align-items:center;gap:8px}.bottom .pagefield{width:62px}.muted{color:var(--muted);font-size:13px}.yt{margin-top:20px;border-top:1px solid var(--line);padding-top:15px}.yt a{color:var(--green);font-size:13px;text-decoration:none}.yt a:hover{text-decoration:underline}
+@media(max-width:900px){.top{height:auto;flex-wrap:wrap}.brand{min-width:180px}.tools{width:100%;overflow:auto}.shell{height:calc(100vh - 166px)}.sidebar{width:230px}.search{width:145px}}
+@media(max-width:620px){.sidebar{position:absolute;z-index:4;top:64px;bottom:54px;width:min(85vw,300px);box-shadow:5px 0 20px #0002}.brand strong{font-size:13px}.brand small{font-size:11px}.viewer{padding:12px 5px}.top{padding:8px}.hide-mobile{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+ <button class="menu" id="toggleSidebar" aria-label="Мазмұнды ашу">☰</button>
+ <div class="brand"><strong>C++ машинаға бағытталған бағдарламалау</strong><small>Электрондық оқу құралы</small></div>
+ <div class="tools">
+  <input id="search" class="search" placeholder="⌕ Іздеу" aria-label="PDF ішінен іздеу">
+  <button id="prevTop" aria-label="Алдыңғы бет">‹</button>
+  <span><input id="pageTop" class="pagefield" value="1" aria-label="Бет нөмірі"> / <span id="totalTop">140</span></span>
+  <button id="nextTop" aria-label="Келесі бет">›</button>
+  <button id="zoomOut" aria-label="Кішірейту">−</button><span class="zoom" id="zoomLabel">100%</span><button id="zoomIn" aria-label="Үлкейту">＋</button>
+  <button id="download" class="hide-mobile">Сәйдіру</button><button id="theme">Қараңғы</button><button id="full">Толық экран</button>
+ </div>
+</header>
+<div class="shell" id="shell">
+ <aside class="sidebar" id="sidebar">
+  <div class="side-title">Мазмұны</div>
+  <nav class="contents" id="contents">
+   <a href="#" data-page="1">Кітаптың мұқабасы</a>
+   <a href="#" data-page="3">Кіріспе</a>
+   <a href="#" data-page="8">1-зертханалық жұмыс. C++ тілінің негіздері</a>
+   <a href="#" data-page="15">2-зертханалық жұмыс. Енгізу және шығару</a>
+   <a href="#" data-page="22">3-зертханалық жұмыс. Шартты операторлар</a>
+   <a href="#" data-page="29">4-зертханалық жұмыс. Циклдер</a>
+   <a href="#" data-page="36">5-зертханалық жұмыс. Бірөлшемді массивтер</a>
+   <a href="#" data-page="43">6-зертханалық жұмыс. Екіөлшемді массивтер</a>
+   <a href="#" data-page="50">7-зертханалық жұмыс. Функциялар</a>
+   <a href="#" data-page="57">8-зертханалық жұмыс. Көрсеткіштер</a>
+   <a href="#" data-page="64">9-зертханалық жұмыс. Құрылымдарды анықтау және қолдану</a>
+   <a href="#" data-page="72">10-зертханалық жұмыс. Жолдармен жұмыс</a>
+   <a href="#" data-page="80">11-зертханалық жұмыс. Файлдармен жұмыс</a>
+   <a href="#" data-page="88">12-зертханалық жұмыс. Кластар және объектілер</a>
+   <a href="#" data-page="98">13-зертханалық жұмыс. Мұрагерлік және полиморфизм</a>
+   <a href="#" data-page="108">14-зертханалық жұмыс. Ерекшеліктерді өңдеу</a>
+   <a href="#" data-page="118">15-зертханалық жұмыс. STL кітапханасы</a>
+  </nav>
+  <div class="yt"><strong>Зертханалық жұмыстарға видео</strong><p class="muted">Әр тақырып бойынша YouTube іздеуіне өту:</p><a id="youtubeLink" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=C%2B%2B+негіздері+қазақша">▶ YouTube-та видео көру</a></div>
+ </aside>
+ <main class="viewer" id="viewer"><div class="page-wrap" id="pageWrap"><canvas id="pdfCanvas"></canvas></div><div class="status" id="status">PDF жүктелуде…</div></main>
+</div>
+<footer class="bottom"><div class="bottom-left"><button id="prevBottom">‹</button><input id="pageBottom" class="pagefield" value="1" aria-label="Бет нөмірі"><strong>/ <span id="totalBottom">140</span></strong><button id="goPage">Өту</button><button id="nextBottom">›</button></div><div class="bottom-right"><button id="contentsBtn">Мазмұны</button><button id="fullBottom">Толық экран</button></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+const PDF_URL='textbook.pdf';
+const pdfjsLib=window['pdfjs-dist/build/pdf'];
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+let pdfDoc=null,pageNum=1,scale=1,renderTask=null,dark=false;
+const canvas=document.getElementById('pdfCanvas'),ctx=canvas.getContext('2d');
+const status=document.getElementById('status');
+const labs=[
+['Кітаптың мұқабасы','C++ оқу құралы'],['Кіріспе','C++ кіріспе'],
+['1-зертханалық жұмыс. C++ тілінің негіздері','C++ тілінің негіздері қазақша'],
+['2-зертханалық жұмыс. Енгізу және шығару','C++ cin cout енгізу шығару'],
+['3-зертханалық жұмыс. Шартты операторлар','C++ if else шартты операторлар'],
+['4-зертханалық жұмыс. Циклдер','C++ for while циклдер'],
+['5-зертханалық жұмыс. Бірөлшемді массивтер','C++ бірөлшемді массивтер'],
+['6-зертханалық жұмыс. Екіөлшемді массивтер','C++ екіөлшемді массивтер'],
+['7-зертханалық жұмыс. Функциялар','C++ функциялар қазақша'],
+['8-зертханалық жұмыс. Көрсеткіштер','C++ көрсеткіштер pointers'],
+['9-зертханалық жұмыс. Құрылымдарды анықтау және қолдану','C++ құрылымдар struct қазақша'],
+['10-зертханалық жұмыс. Жолдармен жұмыс','C++ string жолдар'],
+['11-зертханалық жұмыс. Файлдармен жұмыс','C++ файлдармен жұмыс'],
+['12-зертханалық жұмыс. Кластар және объектілер','C++ classes objects қазақша'],
+['13-зертханалық жұмыс. Мұрагерлік және полиморфизм','C++ inheritance polymorphism'],
+['14-зертханалық жұмыс. Ерекшеліктерді өңдеу','C++ exceptions try catch'],
+['15-зертханалық жұмыс. STL кітапханасы','C++ STL vector map']
+];
+function setPageInputs(){['pageTop','pageBottom'].forEach(id=>document.getElementById(id).value=pageNum)}
+async function renderPage(n){
+ if(!pdfDoc)return;pageNum=Math.max(1,Math.min(pdfDoc.numPages,Number(n)||1));setPageInputs();
+ document.getElementById('youtubeLink').href='https://www.youtube.com/results?search_query='+encodeURIComponent((labs[Math.min(Math.max(pageNum<8?1:Math.floor((pageNum-8)/7)+2,2),labs.length-1)]||labs[2])[1]);
+ if(renderTask){try{renderTask.cancel()}catch(e){}}
+ const page=await pdfDoc.getPage(pageNum),viewport=page.getViewport({scale});
+ canvas.width=viewport.width;canvas.height=viewport.height;canvas.style.width=viewport.width+'px';canvas.style.height=viewport.height+'px';
+ document.getElementById('zoomLabel').textContent=Math.round(scale*100)+'%';
+ renderTask=page.render({canvasContext:ctx,viewport});
+ try{await renderTask.promise}catch(e){}
+ document.querySelectorAll('.contents a').forEach(a=>a.classList.toggle('active',Number(a.dataset.page)===pageNum));
+}
+function changePage(n){renderPage(n)}
+document.getElementById('prevTop').onclick=document.getElementById('prevBottom').onclick=()=>changePage(pageNum-1);
+document.getElementById('nextTop').onclick=document.getElementById('nextBottom').onclick=()=>changePage(pageNum+1);
+document.getElementById('pageTop').addEventListener('change',e=>changePage(e.target.value));
+document.getElementById('goPage').onclick=()=>changePage(document.getElementById('pageBottom').value);
+document.getElementById('pageBottom').addEventListener('keydown',e=>{if(e.key==='Enter')changePage(e.target.value)});
+document.getElementById('zoomIn').onclick=()=>{scale=Math.min(2.5,scale+.1);renderPage(pageNum)};
+document.getElementById('zoomOut').onclick=()=>{scale=Math.max(.4,scale-.1);renderPage(pageNum)};
+document.getElementById('download').onclick=()=>{scale=Math.max(.4,Math.min(1.2,(document.getElementById('viewer').clientWidth-50)/595));renderPage(pageNum)};
+document.getElementById('theme').onclick=()=>{dark=!dark;document.body.style.background=dark?'#20242b':'#e9ebef';document.querySelector('.viewer').style.background=dark?'#20242b':'#e9ebef';document.getElementById('theme').textContent=dark?'Жарық':'Қараңғы'};
+document.getElementById('full').onclick=document.getElementById('fullBottom').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()};
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('hidden')}
+document.getElementById('toggleSidebar').onclick=toggleSidebar;document.getElementById('contentsBtn').onclick=()=>{document.getElementById('sidebar').classList.remove('hidden')};
+document.querySelectorAll('.contents a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();changePage(a.dataset.page);if(innerWidth<620)document.getElementById('sidebar').classList.add('hidden')}));
+document.getElementById('search').addEventListener('keydown',async e=>{if(e.key!=='Enter'||!pdfDoc)return;const q=e.target.value.trim().toLowerCase();if(!q)return;status.style.display='block';status.textContent='Ізделуде…';for(let p=1;p<=pdfDoc.numPages;p++){const page=await pdfDoc.getPage(p),tc=await page.getTextContent(),txt=tc.items.map(x=>x.str).join(' ').toLowerCase();if(txt.includes(q)){await renderPage(p);status.textContent='Табылды: '+p+'-бет';setTimeout(()=>status.style.display='none',1800);return}}status.textContent='Сәйкес мәтін табылмады';setTimeout(()=>status.style.display='none',1800)});
+document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='ArrowRight')changePage(pageNum+1);if(e.key==='ArrowLeft')changePage(pageNum-1)});
+status.style.display='block';status.textContent='PDF жүктелуде…';
+pdfjsLib.getDocument(PDF_URL).promise.then(pdf=>{pdfDoc=pdf;document.getElementById('totalTop').textContent=document.getElementById('totalBottom').textContent=pdf.numPages;status.style.display='none';renderPage(1)}).catch(err=>{status.style.display='block';status.textContent='PDF ашылмады. textbook.pdf файлы index.html файлының жанында тұрғанын тексеріңіз.';console.error(err)});
+</script>
+</body></html>
